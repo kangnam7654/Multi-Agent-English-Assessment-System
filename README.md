@@ -1,4 +1,4 @@
-# Multi Agentic AI Automated Assessment System (포트폴리오 프로젝트)
+# Multi Agent English Assessment System (포트폴리오 프로젝트)
 
 ## 개요
 
