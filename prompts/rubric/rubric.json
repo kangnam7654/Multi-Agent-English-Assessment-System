@@ -1,0 +1,137 @@
+{
+  "elem_6": {
+    "grade_description": "Elementary school 6th grade writers.",
+    "levels": {
+      "beginner": {
+        "description": "Elementary school 6th grade, beginner writer.",
+        "criteria": {
+          "content": "Simple daily topics. Very short, basic ideas only.",
+          "organization": "Almost no clear structure. Sentences may be disconnected.",
+          "vocabulary": "Very limited vocabulary, mostly extremely basic words.",
+          "grammar": "Frequent grammar errors, often affecting understanding.",
+          "length": "20–40 words."
+        }
+      },
+      "intermediate": {
+        "description": "Elementary school 6th grade, intermediate writer.",
+        "criteria": {
+          "content": "Simple but complete ideas about familiar topics.",
+          "organization": "Some structure with basic beginning and end.",
+          "vocabulary": "Basic vocabulary with a few varied words.",
+          "grammar": "Some errors but overall understandable.",
+          "length": "40–60 words."
+        }
+      },
+      "advanced": {
+        "description": "Elementary school 6th grade, advanced writer.",
+        "criteria": {
+          "content": "Well-developed ideas about familiar topics.",
+          "organization": "Clear beginning, middle, and end.",
+          "vocabulary": "Varied vocabulary within everyday topics.",
+          "grammar": "Mostly correct grammar with minor errors.",
+          "length": "60–80 words."
+        }
+      },
+      "master": {
+        "description": "Elementary school 6th grade, master-level writer.",
+        "criteria": {
+          "content": "Rich and detailed ideas even for simple topics.",
+          "organization": "Very clear and logical structure.",
+          "vocabulary": "Rich and appropriate vocabulary for this age.",
+          "grammar": "Almost no grammar errors.",
+          "length": "80–100 words."
+        }
+      }
+    }
+  },
+  "mid_2": {
+    "grade_description": "Middle school 2nd grade writers.",
+    "levels": {
+      "beginner": {
+        "description": "Middle school 2nd grade, beginner writer.",
+        "criteria": {
+          "content": "Very simple opinions with 1 weak reason.",
+          "organization": "Loose structure, ideas may jump around.",
+          "vocabulary": "Basic vocabulary, repetitive.",
+          "grammar": "Frequent errors affecting readability.",
+          "length": "50–80 words."
+        }
+      },
+      "intermediate": {
+        "description": "Middle school 2nd grade, intermediate writer.",
+        "criteria": {
+          "content": "Simple opinions with 1–2 reasons.",
+          "organization": "Some sense of introduction and conclusion.",
+          "vocabulary": "Basic vocabulary with some variety.",
+          "grammar": "Noticeable errors but overall understandable.",
+          "length": "80–120 words."
+        }
+      },
+      "advanced": {
+        "description": "Middle school 2nd grade, advanced writer.",
+        "criteria": {
+          "content": "Clear opinions with 2–3 supporting reasons.",
+          "organization": "Recognizable introduction, body, and conclusion.",
+          "vocabulary": "Varied vocabulary including some abstract words.",
+          "grammar": "Mostly correct grammar, occasional minor errors.",
+          "length": "120–150 words."
+        }
+      },
+      "master": {
+        "description": "Middle school 2nd grade, master-level writer.",
+        "criteria": {
+          "content": "Well-developed, persuasive argument with clear examples.",
+          "organization": "Very clear logical flow and paragraphing.",
+          "vocabulary": "Rich vocabulary, including appropriate academic words.",
+          "grammar": "Very few or no errors.",
+          "length": "150–200 words."
+        }
+      }
+    }
+  },
+  "high_2": {
+    "grade_description": "High school 2nd grade writers.",
+    "levels": {
+      "beginner": {
+        "description": "High school 2nd grade, beginner writer.",
+        "criteria": {
+          "content": "Basic opinions with limited support.",
+          "organization": "Weak structure with unclear transitions.",
+          "vocabulary": "Limited vocabulary for abstract topics.",
+          "grammar": "Frequent errors, especially in complex sentences.",
+          "length": "100–150 words."
+        }
+      },
+      "intermediate": {
+        "description": "High school 2nd grade, intermediate writer.",
+        "criteria": {
+          "content": "Some clear arguments but not fully developed.",
+          "organization": "Recognizable structure but uneven development.",
+          "vocabulary": "Adequate vocabulary with some variety.",
+          "grammar": "Some errors in complex structures but understandable.",
+          "length": "150–200 words."
+        }
+      },
+      "advanced": {
+        "description": "High school 2nd grade, advanced writer.",
+        "criteria": {
+          "content": "Well-structured arguments with relevant examples.",
+          "organization": "Clear introduction, body, and conclusion with transitions.",
+          "vocabulary": "Good range of vocabulary including abstract terms.",
+          "grammar": "Generally accurate, complex sentences handled well.",
+          "length": "200–250 words."
+        }
+      },
+      "master": {
+        "description": "High school 2nd grade, master-level writer.",
+        "criteria": {
+          "content": "Sophisticated, nuanced arguments with strong support.",
+          "organization": "Excellent cohesion and coherence throughout.",
+          "vocabulary": "Rich, precise vocabulary appropriate to academic writing.",
+          "grammar": "Near-native control of grammar and sentence structure.",
+          "length": "220–280 words."
+        }
+      }
+    }
+  }
+}
