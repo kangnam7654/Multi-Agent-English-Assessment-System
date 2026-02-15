@@ -1,13 +1,13 @@
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 
 class SystemPromptBuilder:
     def __init__(self, rubric_path: str) -> None:
         self.rubrics = self._load_rubrics(rubric_path)
 
-    def _load_rubrics(self, rubric_path: str) -> Dict[str, Any]:
+    def _load_rubrics(self, rubric_path: str) -> dict[str, Any]:
         path = Path(rubric_path)
         if not path.exists():
             raise FileNotFoundError(f"Rubric file not found: {path}")
@@ -16,18 +16,17 @@ class SystemPromptBuilder:
 
     # ---------- 공통 유틸 ----------
 
-    def _get_grade_node(self, grade: str) -> Dict[str, Any]:
+    def _get_grade_node(self, grade: str) -> dict[str, Any]:
         try:
             return self.rubrics[grade]
         except KeyError:
-            # 기본 fallback: mid_2
             return self.rubrics["mid_2"]
 
     def _get_grade_description(self, grade: str) -> str:
         grade_node = self._get_grade_node(grade)
         return grade_node.get("grade_description", "No grade description available.")
 
-    def _get_level_node(self, grade: str, level: str) -> Dict[str, Any]:
+    def _get_level_node(self, grade: str, level: str) -> dict[str, Any]:
         grade_node = self._get_grade_node(grade)
         levels = grade_node.get("levels", {})
         return levels.get(level, levels.get("intermediate", {}))

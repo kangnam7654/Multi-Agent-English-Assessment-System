@@ -3,48 +3,34 @@ import json
 from typing import Any
 
 import gradio as gr
-from langchain_ollama import ChatOllama
 
-from agents.state import AgentState, Grade, Level, Mode
-from workflow_builder import build_workflow
+from config import create_graph, create_initial_state
 
-# 전역 리소스
-llm = ChatOllama(model="gpt-oss:20b", temperature=0)
-graph, context_state = build_workflow(llm)
+graph, context_state = create_graph()
 
 
 def run_pipeline(
     mode: str,
-    user_prompt,
+    user_prompt: str,
     grade_for_student: str,
     grade_for_assessor: str,
     level: str,
     essay_input: str,
 ):
-    # 타입 캐스팅 (문자열 → Literal)
-    mode_t: Mode = mode  # type: ignore[assignment]
-    grade_for_student_t: Grade = grade_for_student  # type: ignore[assignment]
-    grade_for_assessor_t: Grade = grade_for_assessor  # type: ignore[assignment]
-    level_t: Level = level  # type: ignore[assignment]
-
-    initial_state: AgentState = {
-        "system_prompt": None,
-        "user_prompt": user_prompt,
-        "essay": essay_input,
-        "assessed_content": None,
-        "grade_for_student": grade_for_student_t,
-        "grade_for_assessor": grade_for_assessor_t,
-        "level": level_t,
-        "mode": mode_t,
-        "next_agent": None,
-    }
+    initial_state = create_initial_state(
+        mode=mode,  # type: ignore[arg-type]
+        user_prompt=user_prompt,
+        grade_for_student=grade_for_student,  # type: ignore[arg-type]
+        grade_for_assessor=grade_for_assessor,  # type: ignore[arg-type]
+        level=level,  # type: ignore[arg-type]
+        essay=essay_input,
+    )
 
     final_state = graph.invoke(initial_state, context=context_state)
 
     essay_out = final_state.get("essay")
     assessed_content = final_state.get("assessed_content")
 
-    # AgentAssessor 는 dict 를 직접 넣으므로 유형별로 안전하게 파싱
     assessed_json: dict[str, Any] | None = None
     if isinstance(assessed_content, dict):
         assessed_json = assessed_content
@@ -53,7 +39,7 @@ def run_pipeline(
             assessed_json = json.loads(assessed_content)
         except json.JSONDecodeError:
             assessed_json = {"raw": assessed_content}
-            print("Assessed content is not valid JSON, returning raw string.")
+
     return essay_out, assessed_json
 
 
@@ -89,7 +75,6 @@ def build_ui():
                 lines=4,
                 placeholder="Enter the essay topic or instructions here.",
             )
-
             essay_input = gr.Textbox(
                 label="Your Essay (used only in assessment mode)",
                 lines=4,
@@ -106,11 +91,8 @@ def build_ui():
             label="Assessment Result (JSON)",
         )
 
-        def _on_run(m, u, g_s, g_a, level_value, e):
-            return run_pipeline(m, u, g_s, g_a, level_value, e)
-
         run_btn.click(
-            _on_run,
+            run_pipeline,
             inputs=[
                 mode,
                 user_prompt,
