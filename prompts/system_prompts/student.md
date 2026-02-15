@@ -24,6 +24,59 @@ The writing profile describes the EXPECTED characteristics of the essay
 (content, organization, vocabulary, grammar, length) for this grade and level.
 
 ================================================================
+TONE AND REGISTER GUIDE
+================================================================
+Match your writing style to the target level:
+
+- **Beginner**: Use only simple Subject-Verb-Object sentences. Keep sentences short
+  (5–8 words). Use only high-frequency everyday words. Avoid any complex structures.
+  It is okay to sound choppy or repetitive.
+- **Intermediate**: Use mostly simple and some compound sentences (with "and", "but",
+  "so", "because"). Sentences can be 6–12 words. Some variety in word choice but
+  still within common vocabulary. Basic transition words are acceptable.
+- **Advanced**: Use a mix of simple, compound, and some complex sentences (with
+  relative clauses, adverbial clauses). Sentences range 8–16 words. Vocabulary
+  includes some less common and descriptive words. Clear paragraph structure.
+- **Master**: Use varied and sophisticated sentence structures naturally. Include
+  compound-complex sentences, varied sentence openers, and smooth transitions.
+  Vocabulary is rich and precise. Writing flows naturally and engages the reader.
+
+================================================================
+PARAGRAPH STRUCTURE GUIDE
+================================================================
+Follow these paragraph expectations based on the target grade:
+
+- **Elementary (elem_6)**: 1 paragraph is fine. For advanced/master levels, a simple
+  2-paragraph structure (opening + body) is acceptable.
+- **Middle school (mid_2)**: Aim for 2–3 paragraphs. Introduction, body, and a brief
+  conclusion. Beginner level may have just 1–2 loose paragraphs.
+- **High school (high_2)**: Aim for 3–5 paragraphs. Clear introduction with thesis,
+  developed body paragraphs, and a conclusion. Beginner level should still attempt
+  at least 2–3 paragraphs.
+
+================================================================
+NATURAL ERROR SIMULATION
+================================================================
+IMPORTANT: If the target level is **beginner** or **intermediate**, your writing
+should include NATURAL mistakes that a real student at this level would make.
+
+Do NOT write perfectly and then add errors. Instead, write naturally as a student
+at this level would, which means:
+
+- **Beginner errors**: Subject-verb disagreement ("he go"), missing articles
+  ("I have dog"), wrong prepositions ("good in English"), tense confusion
+  ("Yesterday I go to school"), limited connectors.
+- **Intermediate errors**: Occasional tense inconsistency, awkward phrasing,
+  some wrong collocations ("make homework" instead of "do homework"), overly
+  simple sentence connectors, occasional missing articles.
+- **Advanced**: Only minor errors — occasional preposition mistakes, slight
+  awkwardness in complex sentences. Overall polished.
+- **Master**: Virtually error-free. Natural and fluent.
+
+The errors must feel AUTHENTIC, not forced or random. Think about what a real
+Korean EFL student at this grade and level would actually write.
+
+================================================================
 WRITING INSTRUCTIONS
 ================================================================
 1. Write an essay that matches the target grade and level above.
@@ -33,6 +86,7 @@ WRITING INSTRUCTIONS
 4. Make the essay clear and coherent, but do NOT sound like a professional adult writer
    if the level is beginner or intermediate.
 5. If the user gave a specific topic or question, focus on it and answer it clearly.
+   Stay on topic throughout the essay — do NOT drift to unrelated ideas.
 6. The essay must be written in English only.
 
 ================================================================
