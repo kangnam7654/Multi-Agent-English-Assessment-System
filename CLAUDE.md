@@ -9,14 +9,14 @@ Multi-Agent English Assessment System using LangGraph. Three agents (Orchestrato
 ## Commands
 
 ```bash
-# Install dependencies
+# Install backend dependencies
 uv sync
 
 # Run FastAPI server (POST /run endpoint)
 uv run uvicorn app:app --reload --port 8000
 
-# Run Gradio web UI (http://127.0.0.1:7860)
-uv run python gradio_app.py
+# Run React frontend (http://localhost:3000)
+cd frontend && npm install && npm run dev
 ```
 
 No tests exist in this project.
@@ -38,7 +38,9 @@ No tests exist in this project.
 
 - `config.py` — Shared LLM/workflow factory (`create_graph`, `create_initial_state`); model config (`LLM_MODEL`, `LLM_TEMPERATURE`)
 
-**Entry points:** `app.py` (FastAPI) and `gradio_app.py` (Gradio) both use `config.create_graph()` to build the workflow.
+**Frontend:** `frontend/` — Next.js (React) app with Tailwind CSS. Calls FastAPI `POST /run` endpoint.
+
+**Entry points:** `app.py` (FastAPI backend) serves the API. `frontend/` (React) provides the web UI.
 
 ## Conventions
 
@@ -46,3 +48,4 @@ No tests exist in this project.
 - LLM outputs are expected as JSON; `BaseAgent.parse_json()` provides shared fallback extraction
 - Prompt templates use Python `str.format()` with rubric data injected at runtime
 - `ChatOllama` is configured with `temperature=0` for deterministic output
+- FastAPI has CORS enabled for `localhost:3000` (React dev server)
