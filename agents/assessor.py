@@ -28,8 +28,8 @@ class AgentAssessor(BaseAgent):
             HumanMessage(content=essay),
         ]
 
-        llm_result = llm.invoke(messages)
-        result = self.parse_json(llm_result.content, "Assessor")
+        raw = self.invoke_llm_with_retry(llm, messages, "Assessor")
+        result = self.parse_json(raw, "Assessor")
 
         state["assessed_content"] = result
         return state

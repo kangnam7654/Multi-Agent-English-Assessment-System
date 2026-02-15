@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { InputForm } from "@/components/input-form";
 import { EssayOutput } from "@/components/essay-output";
 import { AssessmentResult } from "@/components/assessment-result";
@@ -27,29 +27,47 @@ export default function Home() {
   const [assessmentResult, setAssessmentResult] =
     useState<AssessedContent | null>(null);
 
+  const abortRef = useRef<AbortController | null>(null);
+
   const handleSubmit = async () => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setError(null);
     setLoading(true);
 
     try {
-      const res = await runPipeline({
-        mode,
-        user_prompt: mode === "synthesis" ? userPrompt : undefined,
-        grade_for_student: gradeForStudent,
-        grade_for_assessor: gradeForAssessor,
-        level,
-        essay: mode === "assessment" ? essayInput : undefined,
-      });
+      const res = await runPipeline(
+        {
+          mode,
+          user_prompt: mode === "synthesis" ? userPrompt : undefined,
+          grade_for_student: gradeForStudent,
+          grade_for_assessor: gradeForAssessor,
+          level,
+          essay: mode === "assessment" ? essayInput : undefined,
+        },
+        controller.signal,
+      );
 
       setEssayResult(res.essay ?? null);
       setAssessmentResult(res.assessed_content ?? null);
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return;
+      }
       setError(
         err instanceof Error ? err.message : "An unexpected error occurred"
       );
     } finally {
       setLoading(false);
+      abortRef.current = null;
     }
+  };
+
+  const handleCancel = () => {
+    abortRef.current?.abort();
+    setLoading(false);
   };
 
   return (
@@ -91,6 +109,7 @@ export default function Home() {
                 onUserPromptChange={setUserPrompt}
                 onEssayInputChange={setEssayInput}
                 onSubmit={handleSubmit}
+                onCancel={handleCancel}
               />
             </div>
           </div>

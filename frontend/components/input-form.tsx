@@ -7,8 +7,9 @@ import {
   type Level,
   GRADE_LABELS,
   LEVEL_LABELS,
+  wordCount,
 } from "@/lib/api";
-import { Loader2, Play } from "lucide-react";
+import { Loader2, Play, Square } from "lucide-react";
 
 interface InputFormProps {
   mode: Mode;
@@ -25,6 +26,7 @@ interface InputFormProps {
   onUserPromptChange: (value: string) => void;
   onEssayInputChange: (value: string) => void;
   onSubmit: () => void;
+  onCancel: () => void;
 }
 
 export function InputForm({
@@ -42,7 +44,15 @@ export function InputForm({
   onUserPromptChange,
   onEssayInputChange,
   onSubmit,
+  onCancel,
 }: InputFormProps) {
+  const canSubmit =
+    mode === "synthesis"
+      ? userPrompt.trim().length > 0
+      : essayInput.trim().length > 0;
+
+  const essayWords = wordCount(essayInput);
+
   return (
     <div className="space-y-5">
       {/* Mode selector */}
@@ -129,9 +139,14 @@ export function InputForm({
         </div>
       ) : (
         <div>
-          <label className="block text-sm font-medium text-muted-foreground mb-1.5">
-            Your Essay
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-sm font-medium text-muted-foreground">
+              Your Essay
+            </label>
+            <span className="text-xs text-muted-foreground">
+              {essayWords} {essayWords === 1 ? "word" : "words"}
+            </span>
+          </div>
           <textarea
             value={essayInput}
             onChange={(e) => onEssayInputChange(e.target.value)}
@@ -139,27 +154,33 @@ export function InputForm({
             placeholder="Paste your English essay here for assessment..."
             className="w-full px-3 py-2 bg-card border border-border rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground/50"
           />
+          {essayInput.trim() && essayWords < 10 && (
+            <p className="text-xs text-amber-600 mt-1">
+              Essay seems very short. Consider adding more content for a better assessment.
+            </p>
+          )}
         </div>
       )}
 
-      {/* Submit button */}
-      <button
-        onClick={onSubmit}
-        disabled={loading}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? (
-          <>
-            <Loader2 size={18} className="animate-spin" />
-            <span>Processing...</span>
-          </>
-        ) : (
-          <>
-            <Play size={18} />
-            <span>Run Assessment</span>
-          </>
-        )}
-      </button>
+      {/* Submit / Cancel button */}
+      {loading ? (
+        <button
+          onClick={onCancel}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-500 text-white rounded-xl font-semibold text-sm hover:bg-red-600 transition-colors"
+        >
+          <Square size={16} />
+          <span>Cancel</span>
+        </button>
+      ) : (
+        <button
+          onClick={onSubmit}
+          disabled={!canSubmit}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Play size={18} />
+          <span>Run Assessment</span>
+        </button>
+      )}
     </div>
   );
 }

@@ -25,8 +25,8 @@ class AgentStudent(BaseAgent):
             HumanMessage(content=user_prompt),
         ]
 
-        llm_result = llm.invoke(messages)
-        result = self.parse_json(llm_result.content, "Student")
+        raw = self.invoke_llm_with_retry(llm, messages, "Student")
+        result = self.parse_json(raw, "Student")
 
         essay = result.get("essay_english", "")
         if not essay:

@@ -1,15 +1,22 @@
 # config.py
+import os
+
 from langchain_ollama import ChatOllama
 
 from agents.state import AgentState, Grade, Level, Mode
 from workflow_builder import build_workflow
 
-LLM_MODEL = "gpt-oss:20b"
-LLM_TEMPERATURE = 0
+LLM_MODEL = os.getenv("LLM_MODEL", "gpt-oss:20b")
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0"))
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "http://localhost:11434")
 
 
 def create_llm() -> ChatOllama:
-    return ChatOllama(model=LLM_MODEL, temperature=LLM_TEMPERATURE)
+    return ChatOllama(
+        model=LLM_MODEL,
+        temperature=LLM_TEMPERATURE,
+        base_url=LLM_BASE_URL,
+    )
 
 
 def create_graph():

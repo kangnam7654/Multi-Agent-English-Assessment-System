@@ -35,11 +35,15 @@ export interface RunResponse {
   assessed_content: AssessedContent | null;
 }
 
-export async function runPipeline(req: RunRequest): Promise<RunResponse> {
+export async function runPipeline(
+  req: RunRequest,
+  signal?: AbortSignal,
+): Promise<RunResponse> {
   const res = await fetch(`${API_BASE}/run`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
+    signal,
   });
 
   if (!res.ok) {
@@ -48,6 +52,10 @@ export async function runPipeline(req: RunRequest): Promise<RunResponse> {
   }
 
   return res.json();
+}
+
+export function wordCount(text: string): number {
+  return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
 export const GRADE_LABELS: Record<Grade, string> = {
