@@ -21,6 +21,13 @@ export default function Home() {
   const [userPrompt, setUserPrompt] = useState("");
   const [essayInput, setEssayInput] = useState("");
 
+  const handleModeChange = (newMode: Mode) => {
+    setMode(newMode);
+    setError(null);
+    setEssayResult(null);
+    setAssessmentResult(null);
+  };
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [essayResult, setEssayResult] = useState<string | null>(null);
@@ -102,7 +109,7 @@ export default function Home() {
                 userPrompt={userPrompt}
                 essayInput={essayInput}
                 loading={loading}
-                onModeChange={setMode}
+                onModeChange={handleModeChange}
                 onGradeForStudentChange={setGradeForStudent}
                 onGradeForAssessorChange={setGradeForAssessor}
                 onLevelChange={setLevel}

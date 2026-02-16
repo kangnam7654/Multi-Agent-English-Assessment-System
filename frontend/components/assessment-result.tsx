@@ -14,7 +14,9 @@ interface AssessmentResultProps {
 export function AssessmentResult({ result }: AssessmentResultProps) {
   const [lang, setLang] = useState<"en" | "ko">("en");
 
-  const criteria = Object.entries(result.per_criterion);
+  const criteria = result.per_criterion
+    ? Object.entries(result.per_criterion)
+    : [];
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -25,80 +27,88 @@ export function AssessmentResult({ result }: AssessmentResultProps) {
             Overall Score
           </h3>
           <ScoreBadge
-            score={result.overall_score}
-            level={result.level}
+            score={result.overall_score ?? 0}
+            level={result.level ?? "beginner"}
           />
         </div>
       </div>
 
       {/* Per-Criterion Cards */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-sm text-muted-foreground">
-            Criteria Breakdown
-          </h3>
-          <div className="flex gap-1 p-0.5 bg-muted rounded-lg">
-            <button
-              onClick={() => setLang("en")}
-              className={cn(
-                "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
-                lang === "en"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground"
-              )}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => setLang("ko")}
-              className={cn(
-                "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
-                lang === "ko"
-                  ? "bg-card text-foreground shadow-sm"
-                  : "text-muted-foreground"
-              )}
-            >
-              KO
-            </button>
+      {criteria.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-sm text-muted-foreground">
+              Criteria Breakdown
+            </h3>
+            <div className="flex gap-1 p-0.5 bg-muted rounded-lg">
+              <button
+                onClick={() => setLang("en")}
+                className={cn(
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
+                  lang === "en"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground"
+                )}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLang("ko")}
+                className={cn(
+                  "px-2.5 py-1 rounded-md text-xs font-medium transition-all",
+                  lang === "ko"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground"
+                )}
+              >
+                KO
+              </button>
+            </div>
+          </div>
+          <div className="grid gap-3 stagger-children">
+            {criteria.map(([name, criterion]) => (
+              <CriterionCard
+                key={name}
+                name={name}
+                result={criterion}
+                lang={lang}
+              />
+            ))}
           </div>
         </div>
-        <div className="grid gap-3 stagger-children">
-          {criteria.map(([name, criterion]) => (
-            <CriterionCard
-              key={name}
-              name={name}
-              result={criterion}
-              lang={lang}
-            />
-          ))}
-        </div>
-      </div>
+      )}
 
       {/* Summary Feedback */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
-          <MessageSquare size={16} className="text-primary" />
-          <h3 className="font-semibold text-sm">Summary Feedback</h3>
-        </div>
-        <div className="p-4 space-y-3">
-          <div>
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              English
-            </span>
-            <p className="text-sm leading-relaxed mt-1">
-              {result.summary_feedback_english}
-            </p>
+      {(result.summary_feedback_english || result.summary_feedback_korean) && (
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/50">
+            <MessageSquare size={16} className="text-primary" />
+            <h3 className="font-semibold text-sm">Summary Feedback</h3>
           </div>
-          <div className="border-t border-border pt-3">
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Korean
-            </span>
-            <p className="text-sm leading-relaxed mt-1">
-              {result.summary_feedback_korean}
-            </p>
+          <div className="p-4 space-y-3">
+            {result.summary_feedback_english && (
+              <div>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  English
+                </span>
+                <p className="text-sm leading-relaxed mt-1">
+                  {result.summary_feedback_english}
+                </p>
+              </div>
+            )}
+            {result.summary_feedback_korean && (
+              <div className={result.summary_feedback_english ? "border-t border-border pt-3" : ""}>
+                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Korean
+                </span>
+                <p className="text-sm leading-relaxed mt-1">
+                  {result.summary_feedback_korean}
+                </p>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

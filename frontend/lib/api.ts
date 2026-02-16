@@ -47,8 +47,14 @@ export async function runPipeline(
   });
 
   if (!res.ok) {
-    const detail = await res.text();
-    throw new Error(`API error (${res.status}): ${detail}`);
+    let message: string;
+    try {
+      const body = await res.json();
+      message = typeof body?.detail === "string" ? body.detail : JSON.stringify(body);
+    } catch {
+      message = await res.text().catch(() => "Unknown error");
+    }
+    throw new Error(message);
   }
 
   return res.json();

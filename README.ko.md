@@ -16,7 +16,7 @@
 - 루브릭 기반 영어 에세이 평가 (Assessor agent)
 - 학년/수준/모드에 따라 워크플로를 라우팅하는 Orchestrator
 - FastAPI 기반 `/run` HTTP API
-- Gradio 기반 웹 UI 데모 (`gradio_app.py`)
+- React (Next.js) 기반 웹 프론트엔드
 
 ## 아키텍처 개요
 
@@ -40,7 +40,7 @@
 
 간단한 처리 흐름:
 
-1. 클라이언트가 `/run` API 또는 Gradio UI로 요청을 보냅니다.
+1. 클라이언트가 `/run` API 또는 React 프론트엔드로 요청을 보냅니다.
 2. Orchestrator 가 `mode`/`essay`/`grade`/`level`을 보고 다음에 실행할 에이전트와 system prompt 를 결정합니다.
 3. Student 또는 Assessor 가 LLM(Ollama)을 호출해 JSON 결과를 생성합니다.
 4. 마지막에 평가 결과(및 생성된 에세이)를 `AgentState` 에 담아서 반환합니다.
@@ -56,7 +56,8 @@
 ## 기술 스택
 
 - Python 3.12
-- FastAPI / Gradio
+- FastAPI (백엔드 API)
+- Next.js / React / Tailwind CSS (프론트엔드)
 - LangGraph / LangChain + langchain-ollama
 - Ollama (`gpt-oss:20b`)
 
@@ -65,23 +66,22 @@
 ### 사전 준비
 
 1. Python >= 3.12
-2. [Ollama](https://ollama.com/) 설치 및 서버 실행
+2. Node.js >= 18 (React 프론트엔드용)
+3. [Ollama](https://ollama.com/) 설치 및 서버 실행
    ```bash
    ollama serve
    ollama pull gpt-oss:20b
    ```
-3. (선택) [uv](https://github.com/astral-sh/uv) 설치 – 이 프로젝트는 uv 기준으로 세팅되어 있습니다.
+4. (선택) [uv](https://github.com/astral-sh/uv) 설치 – 이 프로젝트는 uv 기준으로 세팅되어 있습니다.
 
 ### 의존성 설치
 
 ```bash
-# uv 사용(권장)
+# 백엔드 (uv 권장)
 uv sync
 
-# 일반 venv + pip 사용
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install fastapi gradio langchain-core langchain-ollama langgraph pyyaml uvicorn
+# 프론트엔드
+cd frontend && npm install
 ```
 
 ### FastAPI API 서버 실행
@@ -107,31 +107,40 @@ uv run uvicorn app:app --reload --port 8000
 
 응답(`RunResponse`)에는 다음 필드가 포함됩니다: `grade`, `level`, `essay`, `assessed_content`
 
-### Gradio 웹 앱 실행
+### React 프론트엔드 실행
 
 ```bash
-uv run python gradio_app.py
+cd frontend && npm run dev
 ```
 
-- 기본 주소: `http://127.0.0.1:7860`
+- 기본 주소: `http://localhost:3000`
 
-Gradio UI에서:
+프론트엔드에서:
 
-- `Mode = synthesis`: `User Prompt` 에 에세이 주제나 지시를 입력하면, Student 에이전트가 에세이를 생성하고 Assessor 에이전트가 바로 평가까지 수행합니다.
-- `Mode = assessment`: `Your Essay` 에 이미 작성된 영어 에세이를 붙여넣으면, Assessor 에이전트가 평가만 수행합니다.
+- `Mode = synthesis`: 에세이 주제를 입력하면, Student 에이전트가 에세이를 생성하고 Assessor 에이전트가 평가합니다.
+- `Mode = assessment`: 이미 작성된 영어 에세이를 붙여넣으면, Assessor 에이전트가 평가만 수행합니다.
+
+### 환경변수 설정 (선택)
+
+| 변수 | 기본값 | 설명 |
+|---|---|---|
+| `LLM_MODEL` | `gpt-oss:20b` | Ollama 모델 이름 |
+| `LLM_TEMPERATURE` | `0` | LLM temperature |
+| `LLM_BASE_URL` | `http://localhost:11434` | Ollama API 기본 URL |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | 프론트엔드용 FastAPI URL |
 
 ## Ollama를 사용하는 이유
 
 - 상용 클라우드 API(OpenAI 등)를 쓰지 않고도, 로컬에서 **무료로 LLM 실험**을 할 수 있게 하기 위함입니다.
 - `langchain-ollama.ChatOllama` 를 사용해 LangChain/LangGraph 워크플로와 자연스럽게 통합했습니다.
-- 모델은 기본적으로 `gpt-oss:20b` 를 사용하지만, `config.py`의 `LLM_MODEL`을 변경하면 쉽게 교체할 수 있습니다.
+- 모델은 기본적으로 `gpt-oss:20b` 를 사용하지만, `LLM_MODEL` 환경변수를 변경하면 쉽게 교체할 수 있습니다.
 
 ## 포트폴리오 관점에서의 포인트
 
 - 멀티 에이전트 아키텍처(Orchestrator + Student + Assessor)를 LangGraph로 구현
 - 영어 교육 도메인(학년/수준 루브릭)과 LLM 프롬프트 설계 경험
 - 클라우드 의존도 없이 Ollama 로컬 모델로 실험 가능한 구조
-- FastAPI + Gradio 를 동시에 사용해 백엔드 API와 데모 UI를 end-to-end로 구성
+- FastAPI + React를 사용해 백엔드 API와 프론트엔드를 end-to-end로 구성
 - 이전 직장에서 진행했던 영어 쓰기 평가 프로젝트의 아이디어를, 개인 포트폴리오용으로 **안전하게 재구성**한 예시
 
 ## 한계 및 주의 사항

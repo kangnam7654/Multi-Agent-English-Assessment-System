@@ -17,7 +17,7 @@ A multi-agent system that **generates and evaluates** English essays. Built on L
 - Rubric-based essay evaluation (Assessor agent)
 - Mode/grade/level-aware workflow routing (Orchestrator)
 - FastAPI `/run` HTTP endpoint
-- Gradio web UI demo (`gradio_app.py`)
+- React (Next.js) web frontend
 
 ## Architecture
 
@@ -27,7 +27,7 @@ A multi-agent system that **generates and evaluates** English essays. Built on L
 
 `orchestrator` → `student` (synthesis mode) → `orchestrator` → `assessor` → END
 
-1. Client sends a request via `/run` API or Gradio UI.
+1. Client sends a request via `/run` API or the React frontend.
 2. **Orchestrator** inspects `mode` / `essay` / `grade` / `level` and determines the next agent + system prompt.
 3. **Student** or **Assessor** calls the LLM (Ollama) and produces a JSON result.
 4. The final assessment (and generated essay, if applicable) is returned in `AgentState`.
@@ -42,7 +42,8 @@ A multi-agent system that **generates and evaluates** English essays. Built on L
 ## Tech Stack
 
 - Python 3.12
-- FastAPI / Gradio
+- FastAPI (backend API)
+- Next.js / React / Tailwind CSS (frontend)
 - LangGraph / LangChain + langchain-ollama
 - Ollama (`gpt-oss:20b`)
 
@@ -51,23 +52,22 @@ A multi-agent system that **generates and evaluates** English essays. Built on L
 ### Prerequisites
 
 1. Python >= 3.12
-2. [Ollama](https://ollama.com/) installed and running
+2. Node.js >= 18 (for the React frontend)
+3. [Ollama](https://ollama.com/) installed and running
    ```bash
    ollama serve
    ollama pull gpt-oss:20b
    ```
-3. (Recommended) [uv](https://github.com/astral-sh/uv) — this project is set up with uv.
+4. (Recommended) [uv](https://github.com/astral-sh/uv) — this project is set up with uv.
 
 ### Install Dependencies
 
 ```bash
-# uv (recommended)
+# Backend (uv recommended)
 uv sync
 
-# or plain venv + pip
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install fastapi gradio langchain-core langchain-ollama langgraph pyyaml uvicorn
+# Frontend
+cd frontend && npm install
 ```
 
 ### Run FastAPI Server
@@ -93,27 +93,36 @@ Request example:
 
 Response fields: `grade`, `level`, `essay`, `assessed_content`
 
-### Run Gradio Web UI
+### Run React Frontend
 
 ```bash
-uv run python gradio_app.py
+cd frontend && npm run dev
 ```
 
-Open `http://127.0.0.1:7860`
+Open `http://localhost:3000`
 
 - **synthesis** mode: enter a topic → Student generates an essay → Assessor evaluates it.
 - **assessment** mode: paste your essay → Assessor evaluates it.
 
+### Environment Variables (optional)
+
+| Variable | Default | Description |
+|---|---|---|
+| `LLM_MODEL` | `gpt-oss:20b` | Ollama model name |
+| `LLM_TEMPERATURE` | `0` | LLM temperature |
+| `LLM_BASE_URL` | `http://localhost:11434` | Ollama API base URL |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | FastAPI URL for frontend |
+
 ## Why Ollama?
 
-Ollama enables free, local LLM experimentation without cloud API costs. The default model is `gpt-oss:20b`, but you can swap it for any model installed in Ollama by changing `LLM_MODEL` in `config.py`.
+Ollama enables free, local LLM experimentation without cloud API costs. The default model is `gpt-oss:20b`, but you can swap it for any model installed in Ollama by setting the `LLM_MODEL` environment variable.
 
 ## Portfolio Highlights
 
 - Multi-agent architecture (Orchestrator + Student + Assessor) implemented with LangGraph
 - English education domain expertise — grade/level rubric design and LLM prompt engineering
 - Zero cloud dependency — local Ollama model
-- End-to-end demo with FastAPI backend + Gradio UI
+- End-to-end demo with FastAPI backend + React frontend
 - Safely reconstructed from a real production project (no proprietary code or data)
 
 ## Limitations
